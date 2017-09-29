@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE mapper PUBLIC '-//mybatis.org//DTD Mapper 3.0//EN'
+	'http://mybatis.org/dtd/mybatis-3-mapper.dtd'>
+<mapper namespace='com.testbatis.InfoMapper'>
+
+	<!-- defining the getUserById() method -->
+	<select id='getUserById' parameterType='int' resultType='User'><!-- User: 
+			Using alias name -->
+		SELECT user_id as userId,
+		email_id as emailId ,
+		password,
+		first_name as
+		firstName,
+		last_name as lastName
+		FROM user
+		WHERE user_id = #{userId}
+	</select>
+
+	<!-- creating hashmap for collecting information -->
+	<resultMap type='User' id='UserResult'><!-- UserResult:id given to use for 
+			further -->
+		<id property='userId' column='user_id' />
+		<result property='emailId' column='email_id' />
+		<result property='password' column='password' />
+		<result property='firstName' column='first_name' />
+		<result property='lastName' column='last_name' />
+	</resultMap>
+
+	<!-- defining the getAllUsers() method -->
+	<select id='getAllUsers' resultMap='UserResult'>
+		SELECT * FROM user
+	</select>
+
+	<!-- defining the insertUser() method -->
+	<insert id='insertUser' parameterType='User' useGeneratedKeys='true'
+		keyProperty='userId'>  <!-- userId is not being given, it is getting incremented itself -->
+		INSERT INTO user(email_id, password, first_name, last_name)
+		VALUES(#{emailId}, #{password}, #{firstName}, #{lastName})
+	</insert>
+
+	<!-- defining the updateUser() method -->
+	<update id='updateUser' parameterType='User'>
+		UPDATE user
+		SET
+		first_name = #{firstName},
+		last_name = #{lastName}
+		WHERE
+		user_id = #{userId}
+	</update>
+
+	<delete id='deleteUser' parameterType='int'>
+		DELETE FROM user WHERE user_id = #{userId}
+	</delete>
+</mapper>
+	
+	
+	
